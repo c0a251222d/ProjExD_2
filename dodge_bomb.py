@@ -61,6 +61,9 @@ def main():
             bb_vy = bb_vy*-1
             bb_rct.move_ip(bb_vx, bb_vy)
 
+        if kk_rct.colliderect(bb_rct):
+            return
+
         screen.blit(kk_img, kk_rct)
         screen.blit(bb_img, bb_rct)
         pg.display.update()
