@@ -29,16 +29,16 @@ def gameover(screen: pg.Surface) -> None:
     「Game Over」の文字列を
     5秒間表示させる
     """
-    go_screen = pg.Surface((WIDTH, HEIGHT))
+    go_screen = pg.Surface((WIDTH, HEIGHT))     # 黒い四角をのせるsurface
     pg.draw.rect(go_screen, (0, 0, 0), pg.Rect(0, 0, WIDTH, HEIGHT))
     go_screen.set_alpha(150)
 
-    go_font = pg.font.Font(None, 50)
+    go_font = pg.font.Font(None, 50)        # 「Game Over」の文字のsurface
     go_txt = go_font.render("Game Over", True, (255, 255, 255))
     go_txt_rct = go_txt.get_rect()
     go_txt_rct.center = 550, 325
 
-    kktn1_img = pg.image.load("fig/8.png")
+    kktn1_img = pg.image.load("fig/8.png")  # こうかとん画像のsurface
     kktn1_img_rct = kktn1_img.get_rect()
     kktn1_img_rct.center = 400, 325
     kktn2_img = pg.image.load("fig/8.png")
@@ -54,6 +54,9 @@ def gameover(screen: pg.Surface) -> None:
 
 
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    """
+    10段階程度の大きさを変えた爆弾Surfaceのリストと加速度のリストを返す
+    """
     bb_imgs = []
     for r in range(1, 11):
         bb_img = pg.Surface((20*r, 20*r))
@@ -76,7 +79,7 @@ def main():
     bb_img.set_colorkey((0, 0, 0))
     bb_rct = bb_img.get_rect()
     bb_rct.center = (random.randint(0, WIDTH)), (random.randint(0, HEIGHT))
-    bb_vx = 5
+    bb_vx = 5   # bb_imgの速度
     bb_vy = 5
 
     clock = pg.time.Clock()
@@ -101,7 +104,7 @@ def main():
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
 
         bb_rct.move_ip(bb_vx, bb_vy)
-        if check_bound(bb_rct)[0] == (False):
+        if check_bound(bb_rct)[0] == (False):   # 速度の反転
             bb_vx = bb_vx*-1
             bb_rct.move_ip(bb_vx, bb_vy)
         if check_bound(bb_rct)[1] == (False):
@@ -109,7 +112,7 @@ def main():
             bb_rct.move_ip(bb_vx, bb_vy)
 
         if kk_rct.colliderect(bb_rct):
-            gameover(screen)
+            gameover(screen)    # ゲームオーバーの処理
             return
 
         screen.blit(kk_img, kk_rct)
