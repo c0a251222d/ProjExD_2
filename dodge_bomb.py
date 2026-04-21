@@ -8,6 +8,16 @@ WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
+def check_bound(rct):
+    yoko = True
+    tate = True
+    if rct.left < 0 or rct.right > 1100:
+        yoko = False
+    if rct.top < 0 or rct.bottom > 650:
+        tate = False
+    return (yoko, tate)
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -21,6 +31,8 @@ def main():
     bb_img.set_colorkey((0, 0, 0))
     bb_rct = bb_img.get_rect()
     bb_rct.center = (random.randint(0, WIDTH)), (random.randint(0, HEIGHT))
+    bb_vx = 5
+    bb_vy = 5
 
     clock = pg.time.Clock()
     tmr = 0
@@ -37,15 +49,18 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]
                 sum_mv[1] += mv[1]
-        # if key_lst[pg.K_UP]:
-        #     sum_mv[1] -= 5
-        # if key_lst[pg.K_DOWN]:
-        #     sum_mv[1] += 5
-        # if key_lst[pg.K_LEFT]:
-        #     sum_mv[0] -= 5
-        # if key_lst[pg.K_RIGHT]:
-        #     sum_mv[0] += 5
         kk_rct.move_ip(sum_mv)
+        if check_bound(kk_rct) != (True, True):
+            kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
+
+        bb_rct.move_ip(bb_vx, bb_vy)
+        if check_bound(bb_rct)[0] == (False):
+            bb_vx = bb_vx*-1
+            bb_rct.move_ip(bb_vx, bb_vy)
+        if check_bound(bb_rct)[1] == (False):
+            bb_vy = bb_vy*-1
+            bb_rct.move_ip(bb_vx, bb_vy)
+
         screen.blit(kk_img, kk_rct)
         screen.blit(bb_img, bb_rct)
         pg.display.update()
