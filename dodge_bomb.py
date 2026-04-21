@@ -8,7 +8,12 @@ WIDTH, HEIGHT = 1100, 650
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
-def check_bound(rct):
+def check_bound(rct:pg.Rect) -> tuple[bool, bool]:
+    """
+    引数：こうかとんRectかばくだんRect
+    戻り値：タプル（横方向判定結果，縦方向判定結果）
+    画面内ならTrue，画面外ならFalse
+    """
     yoko = True
     tate = True
     if rct.left < 0 or rct.right > 1100:
@@ -16,6 +21,25 @@ def check_bound(rct):
     if rct.top < 0 or rct.bottom > 650:
         tate = False
     return (yoko, tate)
+
+
+def gameover(screen: pg.Surface) -> None:
+    """
+    画面をブラックアウトし，
+    泣いているこうかとん画像と
+    「Game Over」の文字列を
+    5秒間表示させる
+    """
+    go_screen = pg.Surface((WIDTH, HEIGHT))
+    pg.draw.rect(go_screen, (0, 0, 0), pg.Rect(0, 0, WIDTH, HEIGHT))
+    go_screen.set_alpha(150)
+    go_font = pg.font.Font(None, 50)
+    go_txt = go_font.render("Game Over", True, (255, 255, 255))
+    go_screen_rct = go_screen.get_rect()
+    go_screen.blit(go_txt, go_screen_rct.center)
+    screen.blit(go_screen, [0, 0])
+    pg.display.update()
+    pg.time.wait(5000)
 
 
 def main():
@@ -62,6 +86,7 @@ def main():
             bb_rct.move_ip(bb_vx, bb_vy)
 
         if kk_rct.colliderect(bb_rct):
+            gameover(screen)
             return
 
         screen.blit(kk_img, kk_rct)
