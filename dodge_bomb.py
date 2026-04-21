@@ -33,11 +33,23 @@ def gameover(screen: pg.Surface) -> None:
     go_screen = pg.Surface((WIDTH, HEIGHT))
     pg.draw.rect(go_screen, (0, 0, 0), pg.Rect(0, 0, WIDTH, HEIGHT))
     go_screen.set_alpha(150)
+
     go_font = pg.font.Font(None, 50)
     go_txt = go_font.render("Game Over", True, (255, 255, 255))
-    go_screen_rct = go_screen.get_rect()
-    go_screen.blit(go_txt, go_screen_rct.center)
+    go_txt_rct = go_txt.get_rect()
+    go_txt_rct.center = 550, 325
+
+    kktn1_img = pg.image.load("fig/8.png")
+    kktn1_img_rct = kktn1_img.get_rect()
+    kktn1_img_rct.center = 400, 325
+    kktn2_img = pg.image.load("fig/8.png")
+    kktn2_img_rct = kktn2_img.get_rect()
+    kktn2_img_rct.center = 700, 325
+
+    go_screen.blit(go_txt, go_txt_rct)
     screen.blit(go_screen, [0, 0])
+    screen.blit(kktn1_img, kktn1_img_rct)
+    screen.blit(kktn2_img, kktn2_img_rct)
     pg.display.update()
     pg.time.wait(5000)
 
